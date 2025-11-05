@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress Graph - LoveFi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/parent.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .graph-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .tab {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            transition: 0.3s;
+        }
+        .tab.active {
+            background: #6C5CE7;
+            color: white;
+            font-weight: 600;
+        }
+        .tab:hover:not(.active) {
+            background: #f0f0f0;
+        }
+        canvas {
+            border-radius: 15px;
+            background: #f9f9f9;
+            padding: 15.0px;
+        }
+    </style>
+</head>
+<body>
+    <body>
+    <!-- MENU TOGGLE -->
+    <button class="menu-toggle">Menu</button>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Menu</h2>
+            <span class="close-btn">×</span>
+        </div>
+        <a href="/parent" class="menu-item">Home</a>
+        <a href="/graph" class="menu-item">Progress Graph</a>
+        <a href="#" class="menu-item">Info</a>
+        <a href="#" class="menu-item">Future</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content" id="main-content">
+        <div class="parent-container">
+            <h1 class="parent-title">Progress Graph</h1>
+            <p class="subtitle">Track Used vs Saved Time</p>
+
+            <div class="graph-container">
+                <div class="tabs">
+                    <div class="tab active" data-period="week">Week</div>
+                    <div class="tab" data-period="month">Month</div>
+                    <div class="tab" data-period="year">Year</div>
+                </div>
+                <canvas id="progressChart"></canvas>
+                       
+        
+    </div>
+
+    <!-- JS -->
+    <script>
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        let chart;
+
+        const data = {
+            week: {{ week_data|tojson|safe }},
+            month: {{ month_data|tojson|safe }},
+            year: {{ year_data|tojson|safe }}
+        };
+
+        function renderChart(period) {
+            const d = data[period] || { labels: [], used: [], saved: [] };
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: d.labels,
+                    datasets: [
+                        {
+                            label: 'Time Used (min)',
+                            data: d.used,
+                            borderColor: '#FF6B6B',
+                            backgroundColor: 'rgba(255,107,107,0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Time Saved (min)',
+                            data: d.saved,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76,175,80,0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderChart(tab.dataset.period);
+            });
+        });
+
+        renderChart('week');
+    </script>
+
+    <script src="{{ url_for('static', filename='js/parent.js') }}"></script>
+</body>
+</body>
+</html>

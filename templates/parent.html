@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}LoveFi Parent{% endblock %}
+
+{% block content %}
+<div class="parent-container">
+    <h1 class="parent-title">LoveFi Parent</h1>
+    <p class="subtitle">Control WiFi with Love</p>
+
+    <!-- SET TIMER CARD -->
+    <div class="card">
+    <h2>Set WiFi Time</h2>
+    <form action="/set-timer" method="post" class="timer-form">
+        <input type="number" name="minutes" value="{{ last_timer }}" min="1" max="240" required>
+        <button type="submit" class="btn-update">Update Timer</button>
+    </form>
+
+    <!-- ACTION BUTTONS IN ONE LINE -->
+    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <form action="/reset-timer" method="post" style="display: inline; margin: 0;">
+            <button type="submit" class="btn-reset">Reset Timer</button>
+        </form>
+        <button type="button" onclick="unblockWiFi()" class="btn-unblock">Unblock WiFi</button>
+        <a href="/kid" class="btn-kid">Go to Kid Timer</a>
+    </div>
+</div>
+
+    <!-- DAILY SAVE CARD -->
+    <div class="card">
+        <h2>Daily Save</h2>
+        <form action="/save-time" method="post" class="save-form">
+            <input type="number" name="used" placeholder="Used today?" required>
+            <button type="submit" class="btn-save">Save 5 min</button>
+        </form>
+        <div class="piggy-display">Piggy Bank: <strong>{{ piggy_bank }}</strong> min saved</div>
+    </div>
+
+    <!-- GIFT TIME CARD -->
+    <div class="card">
+        <h2>Gift Time & Love</h2>
+        <form action="/gift-time" method="post" class="gift-form">
+            <input type="number" name="gift_minutes" value="20" min="5" max="60">
+            <input type="text" name="love_note" placeholder="Love message..." class="love-input">
+            <button type="submit" class="btn-gift">Gift Time + Love</button>
+        </form>
+    </div>
+
+    <!-- LOGOUT -->
+    <form action="/logout" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">Logout</button>
+    </form>
+</div>
+{% endblock %}

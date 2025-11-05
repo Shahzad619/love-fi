@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}LoveFi{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/parent.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400;700&family=Poppins:wght@400;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- SIDEBAR (SHARED) -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span class="menu-icon">Menu</span> Menu
+            <span class="close-btn">×</span>
+        </div>
+        <a href="/parent" class="menu-item">Home</a>
+        <a href="/graph" class="menu-item">Progress Graph</a>
+        <a href="/kid" class="menu-item">Kid Timer</a>
+        <a href="/how-it-works" class="menu-item">How It Works</a>
+        <a href="/why-lovefi" class="menu-item">Why LoveFi</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content" class="main-content">
+        <button class="menu-toggle">Menu</button>
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/parent.js') }}"></script>
+</body>
+</html>

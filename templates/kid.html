@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LoveFi Hero</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kid.css') }}">
+</head>
+<body>
+    <!-- LEFT: ROBOT -->
+    <img src="{{ url_for('static', filename='images/robot.png') }}" class="character robot" alt="Time Keeper">
+
+    <!-- MAIN CONTENT -->
+    <div class="kid-container">
+        <h1 class="kid-title">WiFi Time Left</h1>
+        <div class="timer" id="countdown">00:00:00</div>
+        <a href="/to-parent" class="btn-parent">Go to Parent Control</a>
+        <div class="piggy-bank">Piggy Bank: <span id="bank">0</span> min</div>
+        <div class="streak-container">
+        <div class="streak">Streak: <span id="streak-count">0</span> day(s)</div>
+        <div class="badges" id="badges"></div>
+    </div>
+    </div>
+
+    <!-- RIGHT: PANDA -->
+    <img src="{{ url_for('static', filename='images/panda.png') }}" class="character panda" alt="Love Messenger">
+<!-- LOVE POPUP -->
+<div id="love-popup" class="love-popup">
+    <div id="love-message"></div>
+    <div class="gift-minutes">+<span id="gift-minutes"></span> min</div>
+    <div class="heart-container" id="hearts"></div>
+</div>
+
+<!-- HEARTS ANIMATION -->
+<div id="hearts-container"></div>
+
+<!-- PASS DATA -->
+<script>
+    window.remainingSeconds = {{ remaining_seconds|tojson }};
+    window.initialGiftCount = {{ gifts|length }};
+</script>
+
+    <script src="{{ url_for('static', filename='js/kid.js') }}"></script>
+</body>
+</html>
