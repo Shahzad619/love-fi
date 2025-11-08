@@ -12,7 +12,7 @@
     <div class="kid-container">
         <h1 class="kid-title">WiFi Time Left</h1>
         <div class="timer" id="countdown">00:00:00</div>
-        <a href="/to-parent" class="btn-parent">Go to Parent Control</a>
+        <a href="/parent" class="btn-parent">Back to Parent</a>
         <div class="piggy-bank">Piggy Bank: <span id="bank">0</span> min</div>
         <div class="streak-container">
         <div class="streak">Streak: <span id="streak-count">0</span> day(s)</div>
@@ -36,6 +36,7 @@
 <script>
     window.remainingSeconds = {{ remaining_seconds|tojson }};
     window.initialGiftCount = {{ gifts|length }};
+    window.totalTimer = {{ total_timer|tojson }};
 </script>
 
     <script src="{{ url_for('static', filename='js/kid.js') }}"></script>

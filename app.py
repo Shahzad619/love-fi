@@ -286,7 +286,7 @@ def why_lovefi():
 @app.route('/unblock-wifi', methods=['POST'])
 def unblock_wifi():
     global remaining_time
-    remaining_time = 3600  # 60 minutes in seconds
+    remaining_time = 0  # Keep at 0 — just unblock
     save_data()
     return 'OK'
 

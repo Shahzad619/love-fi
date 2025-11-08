@@ -7,17 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const heartsContainer = document.getElementById('hearts');
 
     let seconds = window.remainingSeconds;
+    let wasTimerSet = window.totalTimer > 0;
     let lastGiftCount = window.initialGiftCount || 0;  // ← FROM SERVER
 
-    function updateTimer() {
-        if (seconds <= 0) {
-            countdownEl.innerHTML = "WiFi Blocked!";
-            countdownEl.style.color = '#e74c3c';
-            countdownEl.style.background = 'rgba(231,76,60,0.1)';
-            document.body.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-            document.body.style.pointerEvents = 'none';
-            return;
+    if (seconds <= 0) {
+    if (wasTimerSet) {
+        countdownEl.innerHTML = "WiFi Blocked!";
+        countdownEl.style.color = '#e74c3c';
+        countdownEl.style.background = 'rgba(231,76,60,0.1)';
+        document.body.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        document.body.style.pointerEvents = 'none';
+        const parentBtn = document.querySelector('.btn-parent');
+        if (parentBtn) {
+            parentBtn.style.pointerEvents = 'auto';
+            parentBtn.style.opacity = '1';
         }
+    } else {
+        countdownEl.innerHTML = "Set Timer from Parent";
+        countdownEl.style.color = '#666';
+        countdownEl.style.background = 'transparent';
+        document.body.style.background = '#f8f9fa';
+    }
+    return;
+    }
+
+
         const h = Math.floor(seconds / 3600);
         const m = Math.floor((seconds % 3600) / 60);
         const s = seconds % 60;
@@ -60,3 +74,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(checkUpdates, 2000);
     checkUpdates();
 });
+
