@@ -1,14 +1,8 @@
 {
-  "piggy_bank": 5,
+  "piggy_bank": 0,
   "current_streak": 1,
-  "last_save_date": "2025-11-05",
-  "gifts": [
-    {
-      "minutes": 20,
-      "message": "you are our cute princess love you DAD",
-      "time": "06:16 PM"
-    }
-  ],
+  "last_save_date": "2025-11-08",
+  "gifts": [],
   "total_timer": 0,
   "remaining_time": 0
 }

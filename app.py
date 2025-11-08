@@ -113,8 +113,8 @@ def parent():
 def set_timer():
     global total_timer, remaining_time
     minutes = int(request.form['minutes'])
-    total_timer = minutes * 60      # convert to seconds
-    remaining_time = total_timer    # seconds
+    total_timer = minutes * 60
+    remaining_time = total_timer
     generate_code()
     save_data()
     return redirect('/kid')
@@ -286,7 +286,7 @@ def why_lovefi():
 @app.route('/unblock-wifi', methods=['POST'])
 def unblock_wifi():
     global remaining_time
-    remaining_time = 60  # 1 hour unblock
+    remaining_time = 3600  # 60 minutes in seconds
     save_data()
     return 'OK'
 
