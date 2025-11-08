@@ -87,19 +87,16 @@ try:
 except:
     pass
 
-@app.route('/')
-def home():
-    return "LoveFi is running! Go to /to-parent", 200
-
+# HEALTH CHECK FOR RENDER
 @app.route('/health')
 def health():
     return "OK", 200
-    
 
-
+# ROOT ROUTE — REDIRECT TO LOGIN
 @app.route('/')
 def home():
-    return redirect('/parent')
+    return redirect('/to-parent')
+
 
 @app.route('/parent')
 def parent():
