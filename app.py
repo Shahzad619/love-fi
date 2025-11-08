@@ -103,7 +103,6 @@ def parent():
     if not session.get('authenticated'):
         return redirect('/to-parent')
     
-    # Refresh activity
     session['last_activity'] = time.time()
     
     last_minutes = total_timer // 60 if total_timer > 0 else 60
@@ -128,8 +127,9 @@ def kid():
         remaining_seconds=remaining_time,
         piggy_bank=piggy_bank,
         code=current_code,
-        gifts=gifts  # ← THIS MUST BE PASSED!
-    )  
+        gifts=gifts,
+        total_timer=total_timer  # ← ADD THIS
+    )
 
 
 @app.route('/save-time', methods=['POST'])

@@ -35,7 +35,7 @@
 <!-- PASS DATA -->
 <script>
     window.remainingSeconds = {{ remaining_seconds|tojson }};
-    window.initialGiftCount = {{ gifts|length }};
+    window.gifts = {{ gifts|tojson }};
     window.totalTimer = {{ total_timer|tojson }};
 </script>
 
