@@ -86,6 +86,14 @@ try:
         ], f)
 except:
     pass
+
+@app.route('/')
+def home():
+    return "LoveFi is running! Go to /to-parent", 200
+
+@app.route('/health')
+def health():
+    return "OK", 200
     
 
 
@@ -298,7 +306,15 @@ def auto_save():
 threading.Thread(target=auto_save, daemon=True).start()
 
 if __name__ == '__main__':
-    # FOR RENDER.COM
     import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+    
+    # FOR RENDER: Keep alive
+    import threading
+    import time
+    def keep_alive():
+        while True:
+            time.sleep(60)
+            print("Keep-alive ping")
+    threading.Thread(target=keep_alive, daemon=True).start()
