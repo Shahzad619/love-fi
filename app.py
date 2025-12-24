@@ -179,6 +179,23 @@ def reset_timer():
     save_data()
     return redirect('/parent')
 
+@app.route('/kid-data')
+def kid_data():
+    return {
+        'remaining': remaining_time,
+        'total_timer': total_timer,
+        'piggy_bank': piggy_bank,
+        'streak': current_streak,
+        'gifts': gifts
+    }
+
+@app.route('/current-time')
+def current_time():
+    return {
+        'remaining': remaining_time,
+        'total_timer': total_timer  # To know if timer was ever set
+    }
+
 @app.route('/get-bank')
 def get_bank():
     return str(piggy_bank)

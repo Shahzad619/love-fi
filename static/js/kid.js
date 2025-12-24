@@ -1,52 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     const countdownEl = document.getElementById('countdown');
     const bankEl = document.getElementById('bank');
+    const streakEl = document.getElementById('streak-count'); // If you have streak display
     const popup = document.getElementById('love-popup');
     const messageEl = document.getElementById('love-message');
     const minutesEl = document.getElementById('gift-minutes');
     const heartsContainer = document.getElementById('hearts');
 
-    let seconds = window.remainingSeconds;
-    let wasTimerSet = window.totalTimer > 0;
-    let lastGiftCount = window.initialGiftCount || 0;  // ← FROM SERVER
+    let lastGiftCount = 0;
+    let wasTimerEverSet = false;
 
-    if (seconds <= 0) {
-    if (wasTimerSet) {
-        countdownEl.innerHTML = "WiFi Blocked!";
-        countdownEl.style.color = '#e74c3c';
-        countdownEl.style.background = 'rgba(231,76,60,0.1)';
-        document.body.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
-        document.body.style.pointerEvents = 'none';
-        const parentBtn = document.querySelector('.btn-parent');
-        if (parentBtn) {
-            parentBtn.style.pointerEvents = 'auto';
-            parentBtn.style.opacity = '1';
-        }
-    } else {
-        countdownEl.innerHTML = "Set Timer from Parent";
-        countdownEl.style.color = '#666';
-        countdownEl.style.background = 'transparent';
-        document.body.style.background = '#f8f9fa';
-    }
-    return;
-    }
-
-
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = seconds % 60;
-        countdownEl.innerHTML = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        seconds--;
+    function formatTime(seconds) {
+        if (seconds <= 0) return "00:00:00";
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        return `${h}:${m}:${s}`;
     }
 
     function showLove(gift) {
-        messageEl.innerText = gift.message;
+        messageEl.innerText = gift.message || "You're awesome!";
         minutesEl.innerText = gift.minutes;
         heartsContainer.innerHTML = '';
         for (let i = 0; i < 6; i++) {
             const heart = document.createElement('div');
             heart.className = 'heart';
-            heart.innerHTML = 'heart';
+            heart.innerHTML = '❤️';
             heart.style.animationDelay = `${i * 0.1}s`;
             heartsContainer.appendChild(heart);
         }
@@ -54,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => popup.classList.remove('show'), 5000);
     }
 
-    function checkUpdates() {
+    function updateAll() {
+        // Fetch gifts + piggy (your existing endpoint works!)
         fetch('/get-gifts')
             .then(r => r.json())
             .then(data => {
@@ -62,16 +42,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (data.list.length > lastGiftCount) {
                     const newGifts = data.list.slice(lastGiftCount);
-                    newGifts.forEach(gift => showLove(gift));
+                    newGifts.forEach(showLove);
                     lastGiftCount = data.list.length;
                 }
+            });
+
+        // Simple fetch for current remaining time (we'll add this tiny route)
+        fetch('/current-time')
+            .then(r => r.json())
+            .then(data => {
+                const seconds = data.remaining;
+                const totalEver = data.total_timer;
+
+                if (totalEver > 0) wasTimerEverSet = true;
+
+                countdownEl.innerHTML = formatTime(seconds);
+
+                if (seconds <= 0) {
+                    if (wasTimerEverSet) {
+                        countdownEl.innerHTML = "WiFi Blocked!";
+                        countdownEl.style.color = '#e74c3c';
+                        document.body.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                        document.body.style.pointerEvents = 'none';
+                        const parentBtn = document.querySelector('.btn-parent');
+                        if (parentBtn) {
+                            parentBtn.style.pointerEvents = 'auto';
+                            parentBtn.style.opacity = '1';
+                        }
+                    } else {
+                        countdownEl.innerHTML = "Set Timer from Parent";
+                        countdownEl.style.color = '#666';
+                        document.body.style.background = '#f8f9fa';
+                    }
+                }
             })
-            .catch(err => console.error('Fetch error:', err));
+            .catch(err => console.log('Update error:', err));
     }
 
-    updateTimer();
-    setInterval(updateTimer, 1000);
-    setInterval(checkUpdates, 2000);
-    checkUpdates();
+    // Run every second for smooth countdown
+    setInterval(updateAll, 1000);
+    updateAll(); // First immediate update
 });
-
